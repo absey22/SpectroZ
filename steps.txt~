@@ -42,8 +42,7 @@ and idl_utils subdir now exist under cvs. you can delete the .tar for this now
 to install the utils package, type these lines into the terminal:
 setenv   IDLUTILS_DIR   ~/cvs/idlutils-v5_5_5  (***)
 setenv   PATH   $IDLUTILS_DIR/bin:$PATH 
-setenv   IDL_PATH   $IDLUTILS_DIR/goddard/pro:$IDL_PATH   
-(this step could be "setenv IDL_PATH $IDLUTILS_DIR/goddard/pro" if IDL_PATH is unset initially) 
+setenv   IDL_PATH   $IDLUTILS_DIR/goddard/pro:$IDL_PATH 
 setenv   IDL_PATH   $IDLUTILS_DIR/pro:$IDL_PATH
 
 (***) change this your version
