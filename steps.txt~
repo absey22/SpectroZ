@@ -1,56 +1,58 @@
-IDLUTILS_DIR=~/cvs/idlutils-v5_5_5/; export IDLUTILS_DIR
-
-PATH=${IDLUTILS_DIR}/bin:$PATH; export PATH
-
-IDL_PATH=${IDLUTILS_DIR}/goddard/pro
-
-IDL_PATH=${IDLUTILS_DIR}/pro:$IDL_PATH
-
-export IDL_PATH
+#STEPS::
 
 
-Cshell to Bash:
-http://sc.tamu.edu/help/general/unix/vars.html
+#switched shell to tsch using:  chsh -s /bin/sh
 
-Useful bash PATH stuff:
-http://www.linfo.org/path_env_var.html
+#add to .tcshrc file:
+	setenv IDL_DIR /usr/local/itt/idl/idl81
+	setenv CVS_RSH ssh
+
+	mkdir cvs
+
+#get the most recent spec2d.tar.gz, put it into ~/cvs and unpack it there using:
+
+	gunzip -vf spec2d.v1_1_4.tar.gz 
+
+#now unpack the package using:
+
+	tar xvf spec2d.v1_1_4.tar 
+
+#The spec2d code should now be found in the ~/cvs/spec2d/pro directory, the linelists in the ~/cvs/spec2d/etc directory, and so forth.
+
+#get idl_utils (find the most recent one, I found v5_5_5), place in cvs, unpack tarball using:
+
+	tar xvf idlutils-v5_5_5.tar
+
+#and idl_utils subdir now exist under cvs. you can delete the .tar for this now
+
+#~~~~~~~~~~~~
+
+#to install the utils package, type these lines into the terminal:
+	setenv   IDLUTILS_DIR   ~/cvs/idlutils-v5_5_5 
+#(change this to your version)
+	setenv   PATH   $IDLUTILS_DIR/bin:$PATH 
+	setenv   IDL_PATH   +$IDLUTILS_DIR/goddard/pro:$IDL_PATH   
+#(this step could be "setenv IDL_PATH +$IDLUTILS_DIR/goddard/pro" if IDL_PATH is unset initially)
+
+	setenv   IDL_PATH   +$IDLUTILS_DIR/pro:$IDL_PATH
+
+#(I added these variables to my .tcshrc since i had to debug the evilmake all issue over multiple sessions)
+
+	cd   $IDLUTILS_DIR 
+	evilmake   all
+
+#This creates a variety of library (.so) files in the directory ~/cvs/idlutils/lib/ (a.k.a. '$IDLUTILS_DIR/lib')
+
+#-----------------------------------------------------------------
+#It didnt do this the first dozen times we tried to evilmake all because of an incorrect path link to export.h. fix this via ::
+
+	rm export.h
+
+#from '$IDLUTILS_DIR/include', replace it with the proper link via:
+
+	ln -s /usr/local/itt/idl/idl81/external/export.h export.h
+#-----------------------------------------------------------------
 
 
-STEPS::
-
-
-switched shell to tsch using:  chsh -s /bin/sh
-
-add to .tcshrc file:
-setenv IDL_DIR /usr/local/itt/idl/idl81
-setenv CVS_RSH ssh
-
-mkdir cvs
-
-setenv CVS_RSH ssh (place this string in .tcshrc)
-
-get the most recent spec2d.tar.gz, put in into your cvs dir and unpack it there using:
-gunzip -vf spec2d.v1_1_4.tar.gz 
-now unpack the package using:
-tar xvf spec2d.v1_1_4.tar 
-The spec2d code should now be found in the ~/cvs/spec2d/pro directory, the linelists in the ~/cvs/spec2d/etc directory, and so forth.
-
-get idl_utils (find the most recent one, I found v5_5_5), place in cvs, unpack tarball using:
-tar xvf idlutils-v5_5_5.tar
-and idl_utils subdir now exist under cvs. you can delete the .tar for this now
-
-to install the utils package, type these lines into the terminal:
-setenv   IDLUTILS_DIR   ~/cvs/idlutils-v5_5_5  (***)
-setenv   PATH   $IDLUTILS_DIR/bin:$PATH 
-setenv   IDL_PATH   $IDLUTILS_DIR/goddard/pro:$IDL_PATH 
-setenv   IDL_PATH   $IDLUTILS_DIR/pro:$IDL_PATH
-
-(***) change this your version
-
-cd   $IDLUTILS_DIR 
-evilmake   all
-This should create a variety of library (.so) files in the directory ~/cvs/idlutils/lib/.
-
-
-
+***FIX IDLENV DATA PATH
 

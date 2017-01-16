@@ -1,13 +1,20 @@
-
 link to nasa idl astro code:
-http://idlastro.gsfc.nasa.gov/ftp/
-http://idlastro.gsfc.nasa.gov/
+	http://idlastro.gsfc.nasa.gov/ftp/
+	http://idlastro.gsfc.nasa.gov/
 
 idl setup help?: 
-http://www.ast.cam.ac.uk/~vasily/idl.htm
-https://www.sdss3.org/dr8/software/idlutils.php
+	http://www.ast.cam.ac.uk/~vasily/idl.htm
+	https://www.sdss3.org/dr8/software/idlutils.php
 
-lensing links:
- link to the spec2d pipeline:  http://deep.ps.uci.edu/spec2d/
+link to the spec2d pipeline:
+	http://deep.ps.uci.edu/spec2d/
+
 * DEEP2 paper (very detailed):  http://adsabs.harvard.edu/abs/2013ApJS..208....5N
 * DEEP3 paper (less detailed, same settings as our data):  http://adsabs.harvard.edu/abs/2011ApJS..193...14C
+
+
+Cshell to Bash:
+	http://sc.tamu.edu/help/general/unix/vars.html
+Useful bash PATH stuff:
+	http://www.linfo.org/path_env_var.html
+
