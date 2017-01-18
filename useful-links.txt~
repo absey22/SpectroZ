@@ -8,10 +8,6 @@ idl setup help?:
 
 link to the spec2d pipeline:
 	http://deep.ps.uci.edu/spec2d/
-primer:
-	http://deep.ps.uci.edu/spec2d/primer.html
-cookbook:
-	http://deep.ps.uci.edu/spec2d/cookbook.html
 
 * DEEP2 paper (very detailed):  http://adsabs.harvard.edu/abs/2013ApJS..208....5N
 * DEEP3 paper (less detailed, same settings as our data):  http://adsabs.harvard.edu/abs/2011ApJS..193...14C

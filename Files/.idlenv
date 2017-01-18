@@ -1,0 +1,34 @@
+# establish my IDL startup file. 
+setenv IDL_STARTUP ~/.idlstartup 
+
+# set the IDL directories. 
+setenv IDL_DIR /usr/local/itt/idl/idl81 
+setenv IDL_HELP_PATH $IDL_DIR/help 
+# These IDL directories will likely differ for you...check with your system administrator. 
+
+
+# add the base IDL library and examples to path. 
+setenv IDL_PATH $IDL_PATH{:}+$IDL_DIR/lib 
+setenv IDL_PATH $IDL_PATH{:}+$IDL_DIR/examples 
+
+
+# add all cvs routines to path. 
+# this includes both the UCB and SDSS routines, as IDL_PATH is searched recursively. 
+setenv IDL_PATH $IDL_PATH{:}+~/cvs 
+
+
+#directories defining locations of IDL code and associated files 
+setenv IDLUTILS_DIR ~/cvs/idlutils-v5_5_5
+setenv DEEP_DIR ~/cvs 
+setenv IDLSPEC2D_DIR ~/cvs/spec2d 
+#directory within which all raw data is contained 
+#setenv DEIMOS_DATA /home/DEIMOS/rawdata 
+#directory within which calibration files are contained 
+setenv CALIB_DATA ~/cvs/calib 
+
+
+# Add any directories previously in your IDL_PATH here, so they will only be searched through after the pipeline code.
+
+#(from .tcshrc)
+setenv IDL_PATH +$IDLUTILS_DIR/goddard/pro
+setenv IDL_PATH +$IDLUTILS_DIR/pro:$IDL_PATH

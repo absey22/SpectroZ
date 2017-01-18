@@ -69,12 +69,5 @@
 	source ~/.idlenv
 
 # added '\' before IDL_PATH setenv in .idlenv as this is what <http://www.physics.uci.edu/~barth/astro-computing/idlsetup.html> does.
-
-
-#To update your copy of the IDLUTILS code (as improvements are made in the packages), you simply need to download the most recent tarball from the Princeton website and download the new tarball follow steps until 'evilmake all' again. To receive the most recent version of the spec2d, download the newest tarball and unpack it again.
-
-
 #***FIX IDLENV DATA PATH when the actual data has a location
-
-# SOURCE :: http://deep.ps.uci.edu/spec2d/cvs/cvs.html#beta
 
