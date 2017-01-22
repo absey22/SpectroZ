@@ -1,4 +1,4 @@
-# SpectroZ
+# DEIMOS Spec2d Pipeline
 
 Progress made on pipeline installation is shown in "steps.txt"
 
