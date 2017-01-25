@@ -22,3 +22,5 @@ Cshell to Bash:
 Useful bash PATH stuff:
 	http://www.linfo.org/path_env_var.html
 
+mecore ds9:
+https://www.gnu.org/software/gnuastro/manual/html_node/Viewing-multiextension-FITS.html

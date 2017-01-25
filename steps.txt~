@@ -59,15 +59,37 @@
 #Create your .idlenv file and a .idlstartup file, typically located in your home directory (~). Make sure that the Goddard IDL Astronomy Library setup code is called within. (This is located under $IDLUTILS_DIR/goddard, however it is an older version of the contents of astron.dir.tar.gz. You can get the newest version from <https://idlastro.gsfc.nasa.gov/>)
 #The IDL_STARTUP (the first line of .idlenv) gives the pathname to a file that gets executed each time an IDL session starts.  
 
-#In order to reference the goddard "setup code" in the .idlstartup file, i need to know what its called as well as what to actually put into the file...
-#It seems like im looking for a file within $IDLUTILS_DIR/goddard which i can reference in .idlstartup...
+#You must reference the goddard library code via placing the following text string in the .idlstartup file:
 
 	!PATH=!PATH+':'+Expand_Path('+~/cvs/idlutils-v5_5_5/goddard/')
 
+#----------------------------
 #*** you must source your idl environment file in your .tcshrc:
 
 	source ~/.idlenv
+#----------------------------
 
-# added '\' before IDL_PATH setenv in .idlenv as this is what <http://www.physics.uci.edu/~barth/astro-computing/idlsetup.html> does.
-#***FIX IDLENV DATA PATH when the actual data has a location
+#(added '\' before IDL_PATH setenv in .idlenv as this is what <http://www.physics.uci.edu/~barth/astro-computing/idlsetup.html> does.)
+
+# You must specify the environmental variables in .idlenv which IDL is to open up:
+
+#directories defining locations of IDL code and associated files 
+	setenv IDLUTILS_DIR ~/cvs/idlutils-v5_5_5
+	setenv DEEP_DIR ~/cvs
+	setenv IDLSPEC2D_DIR ~/cvs/spec2d
+#directory within which all raw data is contained, FIX IDLENV DATA PATH when the actual data has a location
+	setenv DEIMOS_DATA ~/DEIMOSraw
+#directory within which calibration files are contained
+	setenv CALIB_DATA ~/cvs/calib
+
+
+#The environment variable DEIMOS_DATA, in conjunction with the RAWDATADIR line in a plan file, specifies the location of the raw DEIMOS data you wish to reduce; that is, when the pipeline is run the code will look for the raw data in the location given by $DEIMOS_DATA/RAWDATADIR. Thus, for the DEIMOS_DATA directory given above and the RAWDATADIR specified in the example plan file, the spec2d code would search for all DEIMOS files in the directory "/home/DEIMOS/rawdata/2002sep10/". For more information regarding the plan file, refer to the spec2d primer. 
+
+
+#To update your copy of the IDLUTILS code (as improvements are made in the packages), you simply need to download the most recent tarball from the Princeton website and download the new tarball follow steps until 'evilmake all' again. To receive the most recent version of the spec2d, download the newest tarball and unpack it again.
+
+
+
+
+# SOURCE :: http://deep.ps.uci.edu/spec2d/cvs/cvs.html#beta
 
