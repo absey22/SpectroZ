@@ -30,5 +30,5 @@ setenv CALIB_DATA ~/cvs/calib
 # Add any directories previously in your IDL_PATH here, so they will only be searched through after the pipeline code.
 
 #(from .tcshrc)
-setenv IDL_PATH +$IDLUTILS_DIR/goddard/pro
-setenv IDL_PATH +$IDLUTILS_DIR/pro:$IDL_PATH
+setenv IDL_PATH $IDLUTILS_DIR/goddard/pro
+setenv IDL_PATH $IDLUTILS_DIR/pro:$IDL_PATH
