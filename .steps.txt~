@@ -1,0 +1,95 @@
+#STEPS::
+
+
+#switched shell to tsch using:  chsh -s /bin/sh
+
+#add to .tcshrc file:
+	setenv IDL_DIR /usr/local/itt/idl/idl81
+#The IDL_DIR variable sets the location of the current licensed version of IDL
+	setenv CVS_RSH ssh
+
+	mkdir cvs
+
+#get the most recent spec2d.tar.gz, put it into ~/cvs and unpack it there using:
+
+	gunzip -vf spec2d.v1_1_4.tar.gz 
+
+#now unpack the package using:
+
+	tar xvf spec2d.v1_1_4.tar 
+
+#The spec2d code should now be found in the ~/cvs/spec2d/pro directory, the linelists in the ~/cvs/spec2d/etc directory, and so forth.
+
+#get idl_utils (find the most recent one, I found v5_5_5), place in cvs, unpack tarball using:
+
+	tar xvf idlutils-v5_5_5.tar
+
+#and idl_utils subdir now exist under cvs. you can delete the .tar for this now
+
+#~~~~~~~~~~~~
+
+#to install the utils package, type these lines into the terminal:
+	setenv   IDLUTILS_DIR   ~/cvs/idlutils-v5_5_5 
+#(change this to your version)
+	setenv   PATH   $IDLUTILS_DIR/bin:$PATH 
+	setenv   IDL_PATH   +$IDLUTILS_DIR/goddard/pro:$IDL_PATH   
+#(this step could be "setenv IDL_PATH +$IDLUTILS_DIR/goddard/pro" if IDL_PATH is unset initially)
+#The IDL_PATH variable sets the path of directories that are searched for IDL scripts when you issue a command.  There are IDL built-in routines in $IDL_DIR/lib, and there's a very useful library of astronomical IDL routines (including such things as FITS file readers, coordinate precession routines, etc.) maintained at GSFC which I've put into /usr/local/rsi/external/lib.   You can put your own IDL scripts into /home/yourname/idl/lib or in a subdirectory of that.
+
+	setenv   IDL_PATH   +$IDLUTILS_DIR/pro:$IDL_PATH
+
+#(I added these variables to my .tcshrc since i had to debug the evilmake all issue over multiple sessions)
+
+	cd   $IDLUTILS_DIR 
+	evilmake   all
+
+#This creates a variety of library (.so) files in the directory ~/cvs/idlutils/lib/ (a.k.a. '$IDLUTILS_DIR/lib')
+
+#-----------------------------------------------------------------
+#It didnt do this the first dozen times we tried to evilmake all because of an incorrect path link to export.h. fix this via ::
+
+	rm export.h
+
+#from '$IDLUTILS_DIR/include', replace it with the proper link via:
+
+	ln -s /usr/local/itt/idl/idl81/external/export.h export.h
+#-----------------------------------------------------------------
+
+
+#Create your .idlenv file and a .idlstartup file, typically located in your home directory (~). Make sure that the Goddard IDL Astronomy Library setup code is called within. (This is located under $IDLUTILS_DIR/goddard, however it is an older version of the contents of astron.dir.tar.gz. You can get the newest version from <https://idlastro.gsfc.nasa.gov/>)
+#The IDL_STARTUP (the first line of .idlenv) gives the pathname to a file that gets executed each time an IDL session starts.  
+
+#You must reference the goddard library code via placing the following text string in the .idlstartup file:
+
+	!PATH=!PATH+':'+Expand_Path('+~/cvs/idlutils-v5_5_5/goddard/')
+
+#----------------------------
+#*** you must source your idl environment file in your .tcshrc:
+
+	source ~/.idlenv
+#----------------------------
+
+#(added '\' before IDL_PATH setenv in .idlenv as this is what <http://www.physics.uci.edu/~barth/astro-computing/idlsetup.html> does.)
+
+# You must specify the environmental variables in .idlenv which IDL is to open up:
+
+#directories defining locations of IDL code and associated files 
+	setenv IDLUTILS_DIR ~/cvs/idlutils-v5_5_5
+	setenv DEEP_DIR ~/cvs
+	setenv IDLSPEC2D_DIR ~/cvs/spec2d
+#directory within which all raw data is contained, FIX IDLENV DATA PATH when the actual data has a location
+	setenv DEIMOS_DATA ~/DEIMOSraw
+#directory within which calibration files are contained
+	setenv CALIB_DATA ~/cvs/calib
+
+
+#The environment variable DEIMOS_DATA, in conjunction with the RAWDATADIR line in a plan file, specifies the location of the raw DEIMOS data you wish to reduce; that is, when the pipeline is run the code will look for the raw data in the location given by $DEIMOS_DATA/RAWDATADIR. Thus, for the DEIMOS_DATA directory given above and the RAWDATADIR specified in the example plan file, the spec2d code would search for all DEIMOS files in the directory "/home/DEIMOS/rawdata/2002sep10/". For more information regarding the plan file, refer to the spec2d primer. 
+
+
+#To update your copy of the IDLUTILS code (as improvements are made in the packages), you simply need to download the most recent tarball from the Princeton website and download the new tarball follow steps until 'evilmake all' again. To receive the most recent version of the spec2d, download the newest tarball and unpack it again.
+
+
+
+
+# SOURCE :: http://deep.ps.uci.edu/spec2d/cvs/cvs.html#beta
+
