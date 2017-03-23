@@ -13,8 +13,8 @@ do
   if [ ${objectname} != "object" ]; then
    redslit="slit.${maskname}.${slitname}R.fits"
    blueslit="slit.${maskname}.${slitname}B.fits"
-   out1d="spec1d.${maskname}.${slitname}.cluster.fits" 
-   out2d="spec2d.${maskname}.${slitname}.cluster.fits"
+   out1d="spec1d.${maskname}.${slitname}.${objectname}.fits" 
+   out2d="spec2d.${maskname}.${slitname}.${objectname}.fits"
    echo "convert_deimos_to_specpro, \"${file}\", \"${blueslit}\", \"${redslit}\", out1dname=\"${out1d}\", out2dname=\"${out2d}\" "
   fi
 

@@ -55,7 +55,14 @@ for c in photozcat:
         if (c[0] == d[1]):
             spectrophotoz.append(tuple([d[0],d[1],d[2],c[1],c[2],d[3]]))
 
+#---------------------------
+#Write this final result array to a data file...
+#But first write a "header":
+
 f = open(redshiftplot, "w")
-f.write("\n".join(map(lambda x: str(x), spectrophotoz)))
+
+f.write("Slitlet-SeqNr--SpectroZ------------PhotoZ--------------R-band----------Quality\n")
+
+f.write("\n".join(map(lambda x: str(x).strip('()'), spectrophotoz)))
 f.close()
 
