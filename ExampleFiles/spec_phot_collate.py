@@ -2,7 +2,8 @@
 #python spec_phot_collate.py obj_info.M00182.fits M00182_zinfo.dat photoz_M0018.txt specphotplotM00182.dat
 
 from astropy.io import fits
-import matplotlib.pyplot as plt
+import pandas as pd
+#import matplotlib.pyplot as plt
 import numpy as np
 import sys,os
 
@@ -17,14 +18,33 @@ tabdataOBJ = hdulistOBJ['ObjInfo'].data
 objnum=[]
 slitnum=[]
 objtemp=[]
+serendipmultiplicity=[]
+
 a=0
 b=0
 
 
 for a in tabdataOBJ['objno']:
-    if (a != "serendip1") and (a != "serendip2") and (a != "serendip3") and (a not in objtemp):
-        objtemp.append(a)
-
+    #if (a != "serendip1") and (a != "serendip2") and (a != "serendip3") and (a not in objtemp)
+'''    
+      serendip=0
+       if (a not in objtemp):
+	if (a == "serendip1") and (serendip == 0):
+        	serendip = serendip + 1
+		if (a == "serendip1") and (serendip == 1):
+        		break
+	if (a == "serendip2") and (serendip == 1):
+        	serendip = serendip + 1
+		if (a == "serendip2") and (serendip == 2):
+        		break
+	if (a == "serendip3") and (serendip == 2):
+        	serendip = serendip + 1
+		if (a == "serendip3") and (serendip == 3):
+        		break
+	serendipmultiplicity.append(serendip)
+'''
+    objtemp.append(a)
+	
 for b in tabdataOBJ['slitno']:
     if b not in slitnum:
         slitnum.append(b)
@@ -34,12 +54,12 @@ hdulistOBJ.close()
 
 #create objnum, combine the two lists to access sequentially for converting
 objnum=[float(a) for a in objtemp]   
-keylist=zip(slitnum,objnum)
+keylist=zip(slitnum,objnum,serendipmultiplicity)
 
 #list of slitlet number converted to list of ObjID (SeqNr) number.
 zinfo=np.genfromtxt(zinfoname, usecols=(1,5,6), converters = {1: int})
-slitno2objid=[]
 
+slitno2objid=[]
 for a in zinfo:
     for b in keylist:
         if (a[0] == b[0]):
@@ -61,8 +81,9 @@ for c in photozcat:
 
 f = open(redshiftplot, "w")
 
-f.write("Slitlet-SeqNr--SpectroZ------------PhotoZ--------------R-band----------Quality\n")
+f.write("'Slitlet', 'SeqNr', 'SpectroZ', 'PhotoZ', 'R-band', 'Quality'\n")
 
 f.write("\n".join(map(lambda x: str(x).strip('()'), spectrophotoz)))
 f.close()
 
+#M0454S3 = pd.read_csv(filename, skipinitialspace=True)
