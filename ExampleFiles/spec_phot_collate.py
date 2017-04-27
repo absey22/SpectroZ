@@ -8,9 +8,9 @@ import numpy as np
 import sys,os
 
 filename=sys.argv[1]
-zinfoname=sys.argv[2]
-photozcatname=sys.argv[3]
-redshiftplot=sys.argv[4]
+#zinfoname=sys.argv[2]
+#photozcatname=sys.argv[3]
+#redshiftplot=sys.argv[4]
 
 hdulistOBJ=fits.open(filename)
 tabdataOBJ = hdulistOBJ['ObjInfo'].data
@@ -20,30 +20,31 @@ slitnum=[]
 objtemp=[]
 serendipmultiplicity=[]
 
-a=0
-b=0
-
+if (isinstance([a for a in tabdataOBJ['objno']], int)):
+    print(a)
+     #if (a not in objtemp):
+     #   objtemp.append(a)
 
 for a in tabdataOBJ['objno']:
-    #if (a != "serendip1") and (a != "serendip2") and (a != "serendip3") and (a not in objtemp)
-'''    
-      serendip=0
-       if (a not in objtemp):
-	if (a == "serendip1") and (serendip == 0):
-        	serendip = serendip + 1
-		if (a == "serendip1") and (serendip == 1):
-        		break
-	if (a == "serendip2") and (serendip == 1):
-        	serendip = serendip + 1
-		if (a == "serendip2") and (serendip == 2):
-        		break
-	if (a == "serendip3") and (serendip == 2):
-        	serendip = serendip + 1
-		if (a == "serendip3") and (serendip == 3):
-        		break
-	serendipmultiplicity.append(serendip)
-'''
-    objtemp.append(a)
+   serendip=0
+    if (a.isinstance(int)) and (a not in objtemp):
+        objtemp.append(a) 
+        
+    else if (a == "serendip1") and (serendip == 0):
+            serendip = serendip + 1
+            if (a == "serendip1") and (serendip == 1):
+                break
+    else if (a == "serendip2") and (serendip == 1):
+            serendip = serendip + 1
+            if (a == "serendip2") and (serendip == 2):
+                break
+    else (a == "serendip3") and (serendip == 2):
+            serendip = serendip + 1
+            if (a == "serendip3") and (serendip == 3):
+                break
+   serendipmultiplicity.append(serendip)
+
+    
 	
 for b in tabdataOBJ['slitno']:
     if b not in slitnum:
@@ -60,10 +61,10 @@ keylist=zip(slitnum,objnum,serendipmultiplicity)
 zinfo=np.genfromtxt(zinfoname, usecols=(1,5,6), converters = {1: int})
 
 slitno2objid=[]
-for a in zinfo:
-    for b in keylist:
-        if (a[0] == b[0]):
-            slitno2objid.append(tuple([a[0],b[1],a[1],a[2]]))
+for specz in zinfo:
+    for photz in keylist:
+        if (specz[0] == photz[0]):
+            slitno2objid.append(tuple([specz[0],photz[1],specz[1],specz[2]]))
 
 
 
