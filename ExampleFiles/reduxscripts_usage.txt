@@ -1,0 +1,7 @@
+#USAGES:
+
+#runpipeline[1d/2d].sh: initiates the reduction of a slit mask via the plan file (for 2d). You must be in the directory containing the plan or make reference to it (2d). It will run the pipeline in live display mode so you can see whats happening on the surface. It will also save the verbose output into a file called "verbose_output.log" For spec1d, refer to the file itself for usage.
+
+#deimos2specpro.sh: takes the pipeline output files slit*.fits and spec1d*.fits and creates B-R combined 2d spectra from the slit files and converts the spec1d output files for SpecPro. you can edit the naming schemes in the script. It is set to output spec1d.*.cluster.fits and spec2d.*.cluster.fits for readability in Specpro.
+
+#organizeoutput.sh: This script combines the deimos2specpro.sh and a short file organizing regime to place all the different file types together. It places each file type into its own directory. But will also convert the deimos slit/spec1d to spec1d/spec2d for specpro (as above). You should NOT run deimos2specpro.sh AND organizeoutput.sh.
