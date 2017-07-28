@@ -1,1 +1,0 @@
-!PATH=!PATH+':'+Expand_Path('+~/cvs/idlutils-v5_5_5/goddard/')

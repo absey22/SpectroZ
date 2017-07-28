@@ -5,8 +5,9 @@ setenv   PATH   $IDLUTILS_DIR/bin:$PATH
 setenv   IDL_PATH   +$IDLUTILS_DIR/goddard/pro
 setenv   IDL_PATH   +$IDLUTILS_DIR/pro:$IDL_PATH
 
-#idl path such that Idl can run with spec2d procedures to be called from anywhere
+#idl path such that Idl can run with spec1d and spec2d procedures to be called from anywhere
 setenv   IDL_PATH   ${IDL_PATH}:~/cvs/spec2d/pro
+setenv IDL_PATH   ${IDL_PATH}:~/cvs/spec1d/pro
 
 #set idl path for spec pro routines
 setenv IDL_PATH ${IDL_PATH}:+/home/aseymour/specpro/mpfit
@@ -14,9 +15,15 @@ setenv IDL_PATH ${IDL_PATH}:+/home/aseymour/specpro/code
 setenv IDL_PATH ${IDL_PATH}:+/home/aseymour/specpro/external
 setenv SPVIEW /home/aseymour/specpro/templates
 
-
+#locations of homemade scripts
+setenv PATH ${PATH}:/home/aseymour/DEIMOSreduced/redux_scripts
 setenv PATH ${PATH}:/home/aseymour/saods9/bin
+
+#path for idl to utilize Plotmask widget:
+setenv IDL_PATH ${IDL_PATH}:+/home/aseymour/PlotMask_Widget
+
 
 setenv CVS_RSH ssh
 
 source ~/.idlenv
+
