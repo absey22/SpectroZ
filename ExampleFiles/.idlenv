@@ -22,10 +22,13 @@ setenv IDLUTILS_DIR ~/cvs/idlutils-v5_5_5
 setenv DEEP_DIR ~/cvs 
 setenv IDLSPEC2D_DIR ~/cvs/spec2d 
 #directory within which all raw data is contained 
-setenv DEIMOS_DATA ~/ 
+setenv DEIMOS_DATA ~/DEIMOSraw/ 
 #directory within which calibration files are contained 
 setenv CALIB_DATA ~/cvs/calib 
 
+#spec1d and zspec stuff
+setenv D2_RESULTS /home/aseymour/DEIMOSreduced/Post-proposal_reduction
+setenv IDLSPEC1D_DIR /home/aseymour/cvs/spec1d 
 
 # Add any directories previously in your IDL_PATH here, so they will only be searched through after the pipeline code.
 
@@ -33,6 +36,5 @@ setenv CALIB_DATA ~/cvs/calib
 #setenv IDL_PATH  ${IDL_PATH}:+$IDLUTILS_DIR/goddard/pro
 #setenv IDL_PATH  ${IDL_PATH}:+$IDLUTILS_DIR/pro:$IDL_PATH
 
-#make specpro always open color images
-device, decomposed=1
-
+#specpro always opens color images etc.
+#device, decomposed=1
