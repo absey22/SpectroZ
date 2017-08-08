@@ -8,8 +8,10 @@ Read this Wiki at https://github.com/absey22/SpectroZ/wiki
 
 ![SpecPro](https://github.com/absey22/SpectroZ/blob/master/M0018.slitS2.slitlet103.png)
 
-Information regarding the processing of data post-Specpro analysis NOT yet added to Wiki (3/22/17) (See: spec_phot_collate.py)
+Information regarding the processing of data post-Specpro analysis NOT yet added to Wiki (See: spec_phot_collate.py) (3/22/17)
 
-Spec1d data has been reduced for a couple masks, prelimary reduction started (6/2/17) (See:reduce1d.pro or runpipeline.spec1d.sh)
+Spec1d data has been reduced for a couple masks, prelimary reduction started (See:reduce1d.pro or runpipeline.spec1d.sh) (6/2/17)
 
 All but one mask spec1d reduction complete, zspec.pro successfully frankenstein-ed to work with serendipitous objects. (7/27/17)
+
+First three masks cataloged in specz by modified zspec. (8/6/17)
