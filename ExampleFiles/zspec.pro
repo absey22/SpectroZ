@@ -1,5 +1,5 @@
 ;+
-;  NAME:
+;  NAME:-
 ;    zspec
 ; 
 ;  PURPOSE:
@@ -56,9 +56,9 @@ FUNCTION zspec_1d_read, nonlocal, blue=blue, red=red
   COMMON results_COMMON, results, slitcount, q_index
   COMMON directory_COMMON, fulldir
   COMMON twod_data_COMMON, fullfluxdata, fluxdata, extraction_r1, extraction_r2, extraction_offset, slit_display_options
- specfile = 'spec1d.'+results[slitcount].maskname+'.*' + $
+  specfile = 'spec1d.'+results[slitcount].maskname+'.*' + $
             results[slitcount].objname+'.fits'
- 
+  
 ; specfile = 'spec1d'+'.*' + $
 ;             results[slitcount].objname+'.fits'
 ;abs comment changed for spec1d file names
@@ -276,17 +276,19 @@ pro zspec_set_mobject, slitnames
 ; slit.
   
   nslits = n_elements(slitnames)
-  print, "nslits in mobject preamble::::",nslits
-  for ii=0,nslits-1 do begin
+  
+  for ii=0,nslits-1 do begin ;abs comment 6/5/17 tried to get this to work
       dex = where(long(design.slitname) eq long(slitnames[ii]), cnt)
       if cnt eq 0 then message, 'No entry in DesiSlits found!'
+      ;print, 'DESISLITS  ',dex
       dex = where(slitmap.dslitid eq design[dex[0]].dslitid, cnt)
+      ;print, 'SLITOBJMAP thing ',dex,'cnt of obj ',cnt
       if cnt eq 0 then message, 'No entry in SlitObjMap found!'
       if cnt gt 1 then multi = cnt else multi = 1
       if n_elements(mobject) eq 0 then mobject = multi $
       else mobject = [mobject, multi]
   endfor
-  
+  ;print, 'full multi list: ',mobject
 end
 ;------------------------------------------------------------------------
 
@@ -954,8 +956,8 @@ FUNCTION zspec_2d_read, spec1d, nonlocal, fullspec=fullspec
  ; fname2 = 'slit' $
  ;          + '.' + strcompress(results[slitcount].slitname, /remove_all) $
                                 ;          + 'R.fits
-; REMOVED .gz from slit file names since they are not compressed in my
-; source directory. AS 5/25/17
+; abs comment REMOVED .gz from slit file names since they are not
+; compressed in my source directory. 5/25/17
   fname2 = 'slit.' + strcompress(results[slitcount].maskname, /remove_all) $
            + '.' + strcompress(results[slitcount].slitname, /remove_all) $
            + 'R.fits'
@@ -1397,7 +1399,8 @@ PRO zspec_showtext, state
  
   bintabscount = where(strcompress(bintabsread.object,/remove_all) eq results[slitcount].objname)
   if bintabscount[0] ge 0 then imag = strcompress(string(bintabsread[bintabscount].mag), /remove_all) else imag = 'N/A'
-
+  
+  
   string1 = 'Objno: ' + results[slitcount].objname + ',  Slit no: ' $
             + results[slitcount].slitname +', Nobj: ' + nobj_in_slit
   string2 = '------------------------------------'
@@ -1411,7 +1414,8 @@ PRO zspec_showtext, state
   ELSE string4 = '    zbest = ' + string(format='(F9.5)', zres.z)
   string5 = string4 + ',   Q   = ' + string(format='(I3)', results[slitcount].zquality)
   string6 = '  comment = ' + results[slitcount].comment
-  string7 = 'Other Info:'
+  ;abs comment 7/13/17 added this pixel value of obj position (of 50)
+  string7 = '  Extraction window center = ' + string(0.02*(results[slitcount].objpn))
   string8 = '   delta chi^2 = ' + string(zres.rchi2diff * zres.dof)
   string9 = '   eigenvalues = ' + string(format = '(2f8.2)', zres.theta[0:1])
   string10 = '   A star = ' + string(format = '(2f8.2)', zres.theta[2]) + ',   i mag = ' + imag 
@@ -1738,7 +1742,7 @@ PRO zspec_update_atv, state
   offset = abs(extraction_offset)
 
 
-  for i=0, 7 do begin
+  for i=0, 7 do begin ;abs comment 8/4/17  made extraction ticks longer in lambda direction, changed findgen(10) to findgen(500)
       base = fltarr(10) + height*i + offset - 1
   	; left side
       atvplot, findgen(10), base + extraction_r1, color=1, thick=2
@@ -2725,7 +2729,7 @@ PRO zspec_event, event
 
   CASE uval OF
     'NEXT' : BEGIN
-    	temp = savename
+        temp = savename
 	temp2 = dumpname
 ;    	savename = '~/zspec.autosave.fits'
 ;	dumpname = '~/zspec.autosave.sav'
@@ -2747,6 +2751,7 @@ PRO zspec_event, event
           ENDELSE
         ENDIF ELSE IF(slitcount LT nslit-1) THEN $
         slitcount = slitcount+1 $
+        ;print, results[slitcount].slitname,results[slitcount].objname ;abs comment 7/31/17 ensuring the main and serendip objs spectra arent being swapped in the zspec display i.e. problem with apparent image shifting
         ELSE BEGIN
           res = dialog_message('No more slits to view', $
                                dialog_parent=event.TOP)
@@ -3397,7 +3402,6 @@ PRO zspec, mname, local_only=local_only, nodeep=nodeep, orelse=orelse, blue=blue
   slitlist = zbest.slitname
   slitnames = string(slitlist, FORMAT='(I3.3)')
   nslit = N_ELEMENTS(zbest.slitname)
-  ;print,"FIRST nslit is:",nslit;ABS comment
   objlist  = zbest.objname
 
   ;FOR i=0, nslit-1 DO BEGIN
@@ -3422,7 +3426,7 @@ PRO zspec, mname, local_only=local_only, nodeep=nodeep, orelse=orelse, blue=blue
   objnames = strarr(nslit);- serendip_count)   ;abs comment: changed objnames and slnames to include all things
   ;typeofobjnames=typename(objnames);abs comment
   ;print,"it's the type: ",typeofobjnames; abs comment
-  ;print,">>>>>>>>>>the objnames is: ",objnames[0];abs comment
+  
   ;slnames  = strarr(nslit);- serendip_count)
   FOR i=0, nslit-1 DO BEGIN
   ;  IF(STRMID(objlist[i],0,1) NE 's') THEN BEGIN
@@ -3443,8 +3447,10 @@ PRO zspec, mname, local_only=local_only, nodeep=nodeep, orelse=orelse, blue=blue
   counter = 0
   aln_stars =  0
   sky_stuff =  0
+  maincnt=0
   srncnt = 0 ;abs comment initializing serendip obj added counter
   objnames_new =  STRARR(nslit)
+  TEMPobjnames=strarr(nslit) ;abs comment temp use in appending obj pos
   slitnames_new =  STRARR(nslit)
 
   info_file = findfile(fulldir+'/obj_info*.fits', count=ct)
@@ -3467,6 +3473,11 @@ PRO zspec, mname, local_only=local_only, nodeep=nodeep, orelse=orelse, blue=blue
     FOR i=0,  nslit-1 DO BEGIN
       ;print,"objname=", objnames[i]," and slitname=", slitnames[i] ;abs comment
       cnt = WHERE(info.objno EQ objnames[i], c)
+                                ;the below c NE 2 test trips just because of all
+                                ;the serendip1, serendip2, etc. It is
+                                ;not until I append the slitno to each
+                                ;serendip do they become unique. See
+                                ;the following modifications.
       ;IF c NE 2 THEN PRINT, 'Wrong number of entries in infofile for obj: ',  objnames[i]
       IF c EQ 0 THEN BEGIN
           print, 'Error:  No entry in obj_info for: ', objnames[i], '!!!'
@@ -3475,39 +3486,51 @@ PRO zspec, mname, local_only=local_only, nodeep=nodeep, orelse=orelse, blue=blue
       ENDIF
       obj_type =  info[cnt[0]].objtype
       IF obj_type EQ 'P' THEN BEGIN
-        print,'obj_type = ',obj_type,", obj name = ",objnames[i],", slit no = ", slitnames[i]
+        ;abs comment:
+        ;print,'obj_type = ',obj_type,", obj name = ",objnames[i],", slit no = ", slitnames[i]
         objnames_new[counter] =  objnames[i]
+        TEMPobjnames[counter] = objnames[i] ; abs comment: checking number of elements in different lists to make sure things agree before starting zspec reduction
         slitnames_new[counter] =  slitnames[i]
         counter =  counter+1
+        maincnt=maincnt+1
       ENDIF
-      IF obj_type EQ 'Q' THEN BEGIN ; abs comment new IF loop to add in serendips (with new 'srncnt' counter)
-        print,' *obj_type = ',obj_type,", obj name = ", slitnames[i]+'.'+objnames[i]
+      ;------------------------------------------------------
+      ; abs comment new IF loop to add in serendips (with temp 'srncnt' counter)
+      IF obj_type EQ 'Q' THEN BEGIN
+        ;abs comment:
+        ;print,' *obj_type = ',obj_type,", obj name = ", slitnames[i]+'.'+objnames[i]
         objnames_new[counter] =  slitnames[i]+'.'+objnames[i]
+        TEMPobjnames[counter] = objnames[i] ; abs comment: checking number of elements in different lists to make sure things agree before starting zspec reduction
         slitnames_new[counter] =  slitnames[i]
         counter =  counter+1
         srncnt = srncnt + 1
       ENDIF
+      ;------------------------------------------------------
       IF obj_type EQ 'S' THEN BEGIN
         sky_stuff= sky_stuff + 1
-        PRINT,  objnames[i],  ' is sky (to be removed)'
+        PRINT,  objnames[i],  ' is sky'
       ENDIF
       IF obj_type EQ 'A' THEN BEGIN
         aln_stars= aln_stars + 1
-        PRINT,  objnames[i],  ' is a star (so it will be removed)'
+        PRINT,  objnames[i],  ' is a star'
       ENDIF
     ENDFOR
 
     PRINT,  aln_stars,  ' allignment stars removed.'
     PRINT,  sky_stuff,  ' sky slits removed.'
-    PRINT,  srncnt,     ' serendipitous objects added.' ;abs comment
-
+    
     cnt =  WHERE(objnames_new NE '',  c)
     objnames =  objnames_new[cnt]
     slitnames =  slitnames_new[cnt]
     nslit =  N_ELEMENTS(objnames)
+    print, " ------------------------- "
     PRINT,  "Which leaves",c,  ' objects to be redshifted'
+    print, " ------------------------- "
   ENDIF
-
+                                ;abs comment: 7/5/17 OBJNAMES 
+                                ;(and slitnames) list is now ALL mains and
+                                ;serendips, but still includes
+                                ;redundancy problem. SOLVED BELOW
   if n_elements(blue) ne 0 then begin		;ADDED BL 7/22, one time warning about which response curve is being used to display 1d data 
  	print, 'Warning: using blue fill gap and response correction, central wavelength should be less than 7300 A'
   endif else begin
@@ -3518,6 +3541,7 @@ PRO zspec, mname, local_only=local_only, nodeep=nodeep, orelse=orelse, blue=blue
 	endelse
   endelse 
   
+  ; abs comment: 8/1/17  mobject has never worked..
   ; check for each slit if there is more than 1 object in the slit.
   zspec_set_mobject, slitnames
 
@@ -3565,54 +3589,107 @@ PRO zspec, mname, local_only=local_only, nodeep=nodeep, orelse=orelse, blue=blue
            comment:'', $
            zresult:z1, $       ; This will hold the best structure
            zresult_all:z10, $  ; This holds all 10 structures from spec1d
-           zresult_non:z10 $   ; This holds the 10 non-local structures
+           zresult_non:z10, $   ; This holds the 10 non-local structures
+           ;pixr1:0, $             ;abs comment 8/4/17 from
+           ;pixr2:0, $             ;spec1d files for display in zspec
+           objpn:0 $
           }
-  print, 'nslit for zspec structure area:: ',nslit
+  
   
   zbestslitnames = string(zbest.slitname, FORMAT='(I3.3)')
-  zallobjnames = string(zall.objname)
+  zallobjnames = string(zall.objname) ;overriding the serendip removal
 
   zbestslitcount=n_elements(zbest.slitname)
   zbestslitcount=10*zbestslitcount
-  zbestslitnames10 = intarr(zbestslitcount)
   
-  zbestcnt=0
+  zbestslitnames10 = intarr(zbestslitcount);overiding removal
+  zbestcnt=0 
+  
+
+  ;------------
+;create a list containing ten of each element so that all the zfits
+;can be appended
   FOR i=0, n_elements(zbest.slitname)-1 DO BEGIN
      FOR j=0, 9 DO BEGIN
         zbestslitnames10[j+zbestcnt] = zbestslitnames[i]
      ENDFOR
      zbestcnt = zbestcnt+10
   ENDFOR
-  zbestslitnames10 = string(zbestslitnames10, FORMAT='(I3.3)')
+  zbestslitnames10 = string(zbestslitnames10, FORMAT='(I3.3)') ;reformat list
+;--------------
+                                
+;abs comment: just a check that
+;original data structure shows that my
+;manipulated lists have the proper
+;amount of elements
+  print, " "
+  print, "  ELEMENTS TEST:"
+  print, " "
+  print, "# main objects +",maincnt
+  print, "# of serendips +",srncnt
+  print, "    alignments +",aln_stars
+  print, "     sky stuff +",sky_stuff
+  print, "    zbest list -",n_elements(zbest.objname)
+  print, "          =",maincnt+srncnt+aln_stars+sky_stuff-n_elements(zbest.objname), " (this MUST be 0)"
+
+     ;This must be 0, zbestslitnames is the list of all objects since it includes the slit.obj serendip items as well as just the obj items. Whereas zbest.objname contains all the fitted objects including serendip and alignment stars.
   
-  print, "zbestslitnames-objnames numbers: ", n_elements(zbestslitnames)-n_elements(zbest.objname)
-  
-  
+    
   results = replicate(stuff, nslit)
+  spec1dfilenames=strarr(nslit)
+  
   FOR i=0, nslit-1 DO BEGIN
-    print, "iteration: ", i,'  object: ', objnames[i]
+    ;-------------------- 
+      ;abs comment:
+      ;8/4/17 including obj
+      ;pos,r1,r2 in zspec text box (by
+      ;reading in spec1d files and taking
+      ;the corresponding tags.
+    spec1dfilenames[i]="/home/aseymour/DEIMOSreduced/Post-proposal_reduction/"+strtrim(maskname)+"/spec1dRedux/spec1d."+strtrim(maskname)+'.'+strtrim(slitnames[i])+"."+strtrim(TEMPobjnames[i])+".fits"
+    ;print,'FILE:  ', spec1dfilenames[i]
+    spec1dreadfile=mrdfits(spec1dfilenames[i],1,/silent)
+    ;results[i].pixr1 = spec1dreadfile.r1
+    ;results[i].pixr2 = spec1dreadfile.r2
+    results[i].objpn = spec1dreadfile.objpos
+    
+    ;--------------------
+    
     results[i].slitname = slitnames[i]
     results[i].objname  = strtrim(objnames[i])
-    print, "result structure slit and obj names assigned: ",results[i].slitname,'  ',results[i].objname
+    ;print, "result structure slit and obj names assigned: ",results[i].slitname,'  ',results[i].objname
+                                ; abs comment: dex and cnt need to be alternated
+                                ; since
+                                ; their names are not unique in the
+                                ; list without specifying a slit for a
+                                ; serendip name. That is, once objnames[i] is
+                                ; checked against zbest.objnames the
+                                ; code will see too many objects called
+                                ; serendip. It cannot choose the
+                                ; single correct serendip object it
+                                ; needs; for each serendip, providing
+                                ; the "slitno.objname" 
+                                ; makes every item in the list
+                                ; unique, thus allowing dex and ct to
+                                ; obtain the correct counts and items.
     IF STRMID(objnames[i],4,1) EQ 's' THEN BEGIN
-       print, "The concatenated dex was assigned: XXX.OBJNO"
+       ;print, "The concatenated dex was assigned: XXX.OBJNO"
        dex = where(strtrim(zbestslitnames)+'.'+strtrim(zbest.objname) eq strtrim(objnames[i]), num)
     ENDIF ELSE BEGIN
-       print, "the non-concatenated dex was assigned: OBJNO"
+       ;print, "the non-concatenated dex was assigned: OBJNO"
        dex = where(strtrim(zbest.objname) eq strtrim(objnames[i]), num)
     ENDELSE
-    print, "dex:",dex
-    print, 'num matched btwn zbest.objname and objnames[i]: ',num
+    ;print, "dex:",dex
+    ;print, 'num matched btwn zbest.objname and objnames[i]: ',num
     if num ne 1 then message, 'ERROR with zbest variable!' $
     else results[i].zresult = zbest[dex[0]] 
-    print, "results structure zbest assigned: ";, results[i].zresult
+   
     
 ;    results[i].zresult  = zbest[i]
     IF STRMID(objnames[i],4,1) EQ 's' THEN BEGIN
-       print, "The concatenated cnt was assigned: XXX.OBJNO"
+       ;print, "The concatenated cnt was assigned: XXX.OBJNO"
        cnt = where(strtrim(zbestslitnames10)+'.'+strtrim(zallobjnames) EQ strtrim(objnames[i]), ct)
     ENDIF ELSE BEGIN
-       print, "the non-concatenated cnt was assigned: OBJNO"
+       ;print, "the non-concatenated cnt was assigned: OBJNO"
        cnt = where(strtrim(zall.objname) EQ strtrim(objnames[i]), ct)
     ENDELSE
     IF ct EQ 10 THEN results[i].zresult_all = zall[cnt] $
